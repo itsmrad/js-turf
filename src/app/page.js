@@ -55,7 +55,12 @@ export default function HomePage() {
 
 	useEffect(() => {
 		const saved = localStorage.getItem("js-turf-solved");
-		if (saved) setSolvedMap(JSON.parse(saved));
+		if (saved) {
+			// Using queueMicrotask to defer the state update, which avoids the synchronous update warning from React
+			queueMicrotask(() => {
+				setSolvedMap(JSON.parse(saved));
+			});
+		}
 	}, []);
 
 	const filtered = questions.filter((q) => {
@@ -79,7 +84,7 @@ export default function HomePage() {
 			<div className="max-w-6xl w-[90%] md:w-[85%] lg:w-[75%] flex flex-col min-h-screen relative mx-auto">
 				<Navbar />
 
-				<main className="flex-1 w-full mt-12 lg:mt-16 mb-16 flex flex-col">
+				<main className="flex-1 w-full mt-4 lg:mt-6 mb-16 flex flex-col">
 					{/* Header */}
 					<header>
 						<h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-white mb-8">
